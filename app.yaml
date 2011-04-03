@@ -1,4 +1,4 @@
-application: sudorobot
+application: YOUR APP NAME
 version: 1
 runtime: python
 api_version: 1
@@ -8,4 +8,4 @@ inbound_services:
 
 handlers:
 - url: /_ah/xmpp/message/chat/
-  script: bot.py
+  script: sudo.py

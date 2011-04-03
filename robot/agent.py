@@ -8,7 +8,7 @@ from urllib import quote
 from simplejson import loads
 from google.appengine.api import urlfetch
 from google.appengine.api import memcache
-from util import replace, rreplace, shortener
+from robot.util import replace, rreplace, shortener
 
 
 class Agent(object):
@@ -36,11 +36,10 @@ class Agent(object):
             message.reply(data)
 
 class FsAgent(Agent):
-    """FeedzShare Agent"""
+    """Google Feed API Agent"""
 
-    def __init__(self):
-        self.api = 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=' + \
-                quote('http://www.feedzshare.com/s/n/rss') + '&num=10'
+    def __init__(self, feed):
+        self.api = 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=' + quote(feed) + '&num=10'
         self.response = []
 
     def fetch(self, message):
@@ -59,9 +58,31 @@ class FsAgent(Agent):
                 for entry in ret:
                     self.response.append(
                         entry['title'] + '\n' +
-                        replace(entry['contentSnippet']) + ' ' +
+                        replace(entry['contentSnippet'], fs=True) + ' ' +
                         shortener(entry['link']) + '\n\n'
                     )
                 msg = rreplace(''.join(self.response), '\n')
                 return msg
 
+class VxAgent(Agent):
+    """V2EX Agent"""
+
+    def __init__(self):
+        self.api = 'http://v2ex.appspot.com/api/topics/latest.json'
+        self.response = []
+
+    def fetch(self, message):
+        req = Agent.fetch(self, message)
+        if req == False:
+            message.reply(self.__class__.error_msg)
+        else:
+            ret = loads(req.content)[:9]
+            if len(ret) == 0:
+                message.reply(self.__class__.error_msg)
+            else:
+                for topic in ret:
+                    self.response.append(topic['title'] + '\n' + 'replies:' +
+                                         str(topic['replies']) + ' ' + topic['url'] +
+                                        '\n\n')
+                msg = rreplace(''.join(self.response), '\n')
+                return msg

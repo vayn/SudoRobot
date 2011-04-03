@@ -14,7 +14,7 @@ from random import choice
 
 __metaclass__ = type
 
-def replace(s):
+def replace(s, fs=None):
     """replace html entities"""
     dic = {
         '<b>'    : '',
@@ -30,6 +30,8 @@ def replace(s):
 
     for i, j in dic.iteritems():
         s = s.replace(i, j)
+    if fs is True:
+        s = s.replace('FeedzShare', '')
     s = re.sub(r'\s+', ' ', s)
     return s
 
@@ -76,7 +78,6 @@ class RandomGreeting:
         "每个安慰你挂科算什么的人最后都默默拿了奖学金",
         "每个夸你肥嘟嘟的脸好可爱的人最后都瘦成了万人迷",
         "“I'm sorry Dave, I'm afraid I can't do that”",
-        "永远不要恨你的敌人，因为这会影响你的判断力。",
     )
 
     @classmethod

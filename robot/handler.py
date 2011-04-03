@@ -7,8 +7,10 @@
 from google.appengine.ext.webapp.xmpp_handlers import CommandHandler
 
 
+__metaclass__ = type
+
 class BaseHandler(CommandHandler):
-    error_msg = '终结者3.14拒绝接受未授权指令！'
+    error_msg = 'Sudo Robot拒绝接受未授权指令'
 
     def handle_exception(self, exception, debug_mode):
         if self.xmpp_message:
