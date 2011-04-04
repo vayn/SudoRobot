@@ -1,0 +1,7 @@
+[paths]
+default = ssh://hg@bitbucket.org/vayn/sudo-robot
+
+[ui]
+editor = vim
+username = Vayn a.k.a. VT <vayn@vayn.de>
+verbose = True
