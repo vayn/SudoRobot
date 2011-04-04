@@ -11,6 +11,7 @@ sys.setdefaultencoding('utf8')
 
 from urllib import urlencode
 from xml.dom import minidom
+from hashlib import md5
 from google.appengine.api import urlfetch
 from google.appengine.api import memcache
 
@@ -95,7 +96,7 @@ def weather_forecast(location, message=None):
     Reply to client with the forecast.
     You could reinplement it in a better way.
     """
-    data = memcache.get(location)
+    data = memcache.get(md5('forecast'+location).hexdigest())
     if data is None:
         msg = []
         weather = Weather(location, message)
@@ -115,7 +116,7 @@ def weather_forecast(location, message=None):
             fore += "%s\n" % forecast['conditions'][i]
         msg.append(fore[:-1])
         data = '\n'.join(msg)
-        memcache.add(location, data, 43200)
+        memcache.add(md5('forecast'+location).hexdigest(), data, 43200)
         message.reply(data)
     else:
         message.reply(data)

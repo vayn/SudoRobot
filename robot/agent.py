@@ -5,6 +5,7 @@
 # @Date: 2011年03月30日 星期三 09时59分28秒
 
 from urllib import quote
+from hashlib import md5
 from simplejson import loads
 from google.appengine.api import urlfetch
 from google.appengine.api import memcache
@@ -27,12 +28,12 @@ class Agent(object):
 
     def get_data(self, message, key):
         """Get and add data from/to memcache"""
-        data = memcache.get(key)
+        data = memcache.get(md5('agent'+key).hexdigest())
         if data is not None:
             message.reply(data)
         else:
             data = self.fetch(message)
-            memcache.add(key, data, 600)
+            memcache.add(md5('agent'+key).hexdigest(), data, 600)
             message.reply(data)
 
 class FsAgent(Agent):
