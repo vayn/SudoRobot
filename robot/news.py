@@ -22,7 +22,7 @@ class News(object):
 
     def feedzshare_server(self, message):
         """FeedzShare最新条目"""
-        agent = FsAgent('http://www.feedzshare.com/s/n/rss')
+        agent = FsAgent('http://feeds.feedburner.com/feedzsharenewest')
         agent.get_data(message, 'fs')
     f_server = feedzshare_server
 

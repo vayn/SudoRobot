@@ -4,6 +4,8 @@
 # @Name: handler.py
 # @Date: 2011年03月29日 星期二 08时05分23秒
 
+import logging
+import traceback
 from google.appengine.ext.webapp.xmpp_handlers import CommandHandler
 
 
@@ -15,6 +17,7 @@ class BaseHandler(CommandHandler):
     def handle_exception(self, exception, debug_mode):
         if self.xmpp_message:
             self.xmpp_message.reply(self.error_msg+'~')
+        logging.error(traceback.format_exc())
 
     def unhandled_command(self, message):
         message.reply(self.error_msg)

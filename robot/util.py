@@ -44,11 +44,14 @@ def shortener(url):
     api = 'https://www.googleapis.com/urlshortener/v1/url'
     headers = {'Content-Type': 'application/json',}
     param = simplejson.dumps({"longUrl": url})
-    req = urllib2.Request(api, param, headers)
-    resp = urllib2.urlopen(req)
-    ret = resp.read()
-    shorter = simplejson.loads(ret)['id']
-    return shorter
+    try: 
+        req = urllib2.Request(api, param, headers)
+        resp = urllib2.urlopen(req)
+        ret = resp.read()
+        shorter = simplejson.loads(ret)['id']
+        return shorter
+    except:
+        return url
 
 # Time inquiry {{{
 TIME_FORMAT = '北京时间 %Y年%m月%d日 %H:%M:%S'
